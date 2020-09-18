@@ -1,0 +1,15 @@
+{
+  "name": "tuyapi-ipc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "89jd",
+  "license": "ISC",
+  "dependencies": {
+    "tuyapi": "^5.3.1"
+  },
+  "bin": "./cli.js"
+}
