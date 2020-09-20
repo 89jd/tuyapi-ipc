@@ -1,7 +1,7 @@
 {
   "name": "tuyapi-ipc",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.2",
+  "description": "Allows for communication over file descriptors for IPC with tuyapi",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,6 +9,7 @@
   "author": "89jd",
   "license": "ISC",
   "dependencies": {
+    "argparse": "^2.0.1",
     "tuyapi": "^5.3.1"
   },
   "bin": "./cli.js"

@@ -3,9 +3,9 @@ const TuyaDevice = require('tuyapi');
 const fs = require('fs')
 const readline = require('readline');
 
-const isFromIpc = process.argv.length == 5;
-
-device = null
+var debug = false;
+device = null;
+writeStream = process.stdout;
 
 function connectDevice({ip, id, key}, onReady = null) {
   device = new TuyaDevice({
@@ -65,40 +65,45 @@ function sendResponse(type, data) {
   if (data) {
     response['data'] = data
   }
-  if (isFromIpc) {
+  if (debug) {
     console.log('Node response: ' + JSON.stringify(response))
   }
   writeStream.write(JSON.stringify(response))
   writeStream.write('\n')
 }
 
-const readFunctions = {
+const readFunctions = { 
   'connect': connectDevice,
   'disconnect': disconnect,
   'set': setDps
 }
 
-async function main(profileName) {
-    writeStream = fs.createWriteStream(null, {fd: parseInt(process.argv[3])});
+async function main(fdw, fdr, debug) {
+    writeStream = fs.createWriteStream(null, {fd: parseInt(fdw)});
+
     writeStream.on('end', function() {
         console.log('Write stream finished');
     });
-    writeStream.on('error', function(err) {
-      console.log(err);
-  });
 
-    const lineReader = readline.createInterface({
-      input: fs.createReadStream(null, {fd: parseInt(process.argv[2])})
+    writeStream.on('error', function(err) {
+      if (debug) {
+        console.log(err);
+      }
     });
 
-    // This catches any errors that happen while creating the readable stream (usually invalid names)
+    const lineReader = readline.createInterface({
+      input: fs.createReadStream(null, {fd: parseInt(fdr)})
+    });
+
     lineReader.on('error', function(err) {
-        console.log(err);
+        console.error(err);
     });
 
     lineReader.on('line', function(data) {
         const msg = JSON.parse(data);
-        console.log('Node receive: ' + data)
+        if (debug) {
+          console.log('Node receive: ' + data)
+        }
         f = readFunctions[msg['type']];
         if (f) {
           if ('data' in msg) {
@@ -110,7 +115,9 @@ async function main(profileName) {
     });
 
     lineReader.on('end', function() {
-        console.log('Read stream finished');
+        if (debug) {
+          console.log('Read stream finished');
+        }
     });
 
     lineReader.on('error', function(err) {
@@ -118,10 +125,9 @@ async function main(profileName) {
     });
 }
 
-
 module.exports = {
   main: main,
   connectDevice: connectDevice,
   disconnect: disconnect,
-  setDps: setDps
+  setDps: setDps,
 } 
