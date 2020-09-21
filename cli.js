@@ -37,7 +37,7 @@ const parsed = parser.parse_args();
 const tuyaArgs = [parsed.ip, parsed.device_id, parsed.token, parsed.dps, parsed.request];
 const fileDescriptorArgs = [parsed.fdw, parsed.fdr];
 
-const isIpc = tuyaArgs.every((el)=> {return el != null;});
+const isNotIpc = tuyaArgs.every((el)=> {return el != null;});
 
 const tuyaArgsAreInvalid = tuyaArgs.some((el)=> {return el != null;}) 
         && tuyaArgs.some((el)=> {return el == null;})
@@ -47,7 +47,7 @@ const fileDescriptorArgsAreInvalid = fileDescriptorArgs.some((el)=> {return el !
 if (tuyaArgsAreInvalid && fileDescriptorArgsAreInvalid) {
     parser.error('Needs IP, device ID, token, dps, and request or write and read file descriptors');
 } else {
-    if (isIpc) {
+    if (isNotIpc) {
         const ip = parsed.ip;
         const id = parsed.device_id;
         const key = parsed.token;

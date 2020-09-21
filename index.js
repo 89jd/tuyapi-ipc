@@ -17,6 +17,9 @@ function connectDevice({ip, id, key}, onReady = null) {
   function onDataListener (data) {
     sendResponse('ready', { data: data})
     device.removeListener('data', onDataListener);
+    device.on('data', (data) => {
+      sendResponse('response', data)
+    });
     if (onReady) {      
       onReady();
     }
@@ -44,10 +47,6 @@ function connectDevice({ip, id, key}, onReady = null) {
 }
 
 function setDps({dps, value}) {
-  device.on('data', data => {
-    sendResponse('response', data)
-  });
-
   device.set({
     dps: dps,
     set: value
