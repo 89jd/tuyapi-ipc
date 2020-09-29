@@ -3,6 +3,8 @@ const TuyaDevice = require('tuyapi');
 const fs = require('fs')
 const readline = require('readline');
 
+process.on('unhandledRejection', e => { sendResponse('disconnected') })
+
 var debug = false;
 device = null;
 writeStream = process.stdout;
