@@ -87,8 +87,9 @@ async function main(fdw, fdr, debug) {
     });
 
     writeStream.on('error', function(err) {
-      if (debug) {
-        console.log(err);
+      console.error(err);
+      if ('EPIPE' == err.code) {
+        disconnect();
       }
     });
 

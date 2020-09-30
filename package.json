@@ -1,6 +1,6 @@
 {
   "name": "tuyapi-ipc",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Allows for communication over file descriptors for IPC with tuyapi",
   "main": "index.js",
   "scripts": {
